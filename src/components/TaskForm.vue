@@ -14,6 +14,16 @@
         <b-form-select id="action" v-model="task.action" :options="selectActions" required />
       </b-form-group>
 
+      <b-form-group id="message-form-group"
+                    label="Message"
+                    label-for="message">
+        <b-form-textarea id="message"
+                         v-model.trim="task.message"
+                         placeholder="message to send"
+                         :rows="4">
+        </b-form-textarea>
+      </b-form-group>
+
       <b-button type="submit" variant="primary">Save</b-button>
     </b-form>
   </div>
@@ -33,11 +43,13 @@ export default{
       task = {
         schedule: '* * * * * * *',
         action: 'send_telegram_message',
+        message: '',
       };
     } else {
       task = {
         schedule: this.editTask.schedule,
         action: this.editTask.action,
+        message: '',
       };
     }
     return {

@@ -3,6 +3,9 @@
     <div class="col-md-10">
       <h6>{{task.action}}</h6>
       {{task.schedule}} {{performAt}}
+      <p class="task-message">
+        {{task.message}}
+      </p>
     </div>
     <div class="col-md-1" v-if="visibleButtons">
       <b-button variant="danger" @click="deleteTask()">
@@ -10,11 +13,11 @@
       </b-button>
     </div>
     <div class="col-md-1" v-if="visibleButtons">
-      <b-btn v-b-modal="'editTaskForm'" class="btn-success">
+      <b-btn v-b-modal="modalId" class="btn-success">
         <v-icon name="edit" />
       </b-btn>
     </div>
-    <b-modal id="editTaskForm"
+    <b-modal :id="modalId"
              hide-footer
              title="Edit task"
              size="lg"
@@ -40,14 +43,18 @@ export default {
       const performAtTime = moment.unix(this.task.perform_at);
       return performAtTime.format('YYYY M D HH:mm:ss');
     },
+    modalId() {
+      return `editTaskForm-${this.task.id}`;
+    },
   },
   data() {
     return {
-      visibleButtons: false,
+      visibleButtons: true,
     };
   },
   methods: {
     deleteTask() {
+      // eslint-disable-next-line
       if (window.confirm('Are you sure?')) {
         axios.delete(`http://localhost:8000/tasks/${this.task.id}`)
           .then(() => this.fetchTasks());
